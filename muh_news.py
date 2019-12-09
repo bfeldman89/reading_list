@@ -4,7 +4,6 @@ import datetime
 import time
 import urllib.parse
 import os
-import requests
 
 from airtable import Airtable
 from gensim.summarization import keywords as gen_kwds
@@ -13,6 +12,18 @@ from newspaper.article import ArticleException
 
 airtab = Airtable(os.environ['articles_db'],
                   'links', os.environ['AIRTABLE_API_KEY'])
+
+airtab_log = Airtable(os.environ['log_db'],
+                      'log', os.environ['AIRTABLE_API_KEY'])
+
+
+def wrap_it_up(t0, new, total=None, function=None):
+    this_dict = {'module': 'muh_news.py'}
+    this_dict['function'] = function
+    this_dict['duration'] = round((time.time() - t0) / 60, 2)
+    this_dict['total'] = total
+    this_dict['new'] = new
+    airtab_log.insert(this_dict, typecast=True)
 
 
 def scrape_pages():
@@ -35,6 +46,7 @@ def scrape_pages():
             this_dict['oops'] = 'newspaper fucked up'
         finally:
             airtab.update(record['id'], this_dict)
+    # wrap_it_up('scrape_pages', t0, len(records), total=None)
     return len(records)
 
 
@@ -77,14 +89,11 @@ def upload_img():
 
 def main():
     t0 = time.time()
-    scrape_pages()
+    new = scrape_pages()
     extract_kwds()
     clean_urls()
     upload_img()
-    data = {'Value1': 'muh_news.py'}
-    data['Value2'] = round(time.time() - t0, 2)
-    ifttt_event_url = os.environ['IFTTT_WEBHOOKS_URL'].format('muh_news')
-    requests.post(ifttt_event_url, json=data)
+    wrap_it_up(t0, new)
 
 
 if __name__ == "__main__":
