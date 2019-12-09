@@ -3,19 +3,24 @@
 import os
 import plistlib
 import time
-import requests
 from airtable import Airtable
 
-airtab = Airtable(os.environ['articles_db'], 'ifttt',
-                  os.environ['AIRTABLE_API_KEY'])
-input_file = os.path.join(
-    os.environ['HOME'], 'Library/Safari/Bookmarks.plist')
-t0 = time.time()
+airtab = Airtable(os.environ['articles_db'], 'links', os.environ['AIRTABLE_API_KEY'])
+airtab_log = Airtable(os.environ['log_db'], 'log', os.environ['AIRTABLE_API_KEY'])
+input_file = os.path.join(os.environ['HOME'], 'Library/Safari/Bookmarks.plist')
+
+
+def wrap_it_up(t0, new, total=None, function=None):
+    this_dict = {'module': 'scheduled_tweets.py'}
+    this_dict['function'] = function
+    this_dict['duration'] = round(time.time() - t0, 2)
+    this_dict['total'] = total
+    this_dict['new'] = new
+    airtab_log.insert(this_dict, typecast=True)
 
 
 def get_it():
-    # set airtab for the "ifttt" table in the "ARTICLES" base
-    old_links, new_links = 0, 0
+    new_links, t0 = 0, time.time()
     with open(input_file, 'rb') as plist_file:
         plist = plistlib.load(plist_file)
     children = plist['Children']
@@ -33,19 +38,11 @@ def get_it():
             this_dict['via'] = 'get_reading_list.py'
             airtab.insert(this_dict)
             new_links += 1
-        else:
-            old_links += 1
-    results = f"new links: {new_links}\nold links: {old_links}\
-               \nduration: {round(time.time() - t0, 2)}"
-    return results
+    wrap_it_up(t0, new_links, len(bookmarks), 'get_it')
 
 
 def main():
-    data = {'Value1': 'get_reading_list.py'}
-    data['Value2'] = get_it()
-    data['Value3'] = 'success'
-    ifttt_event_url = os.environ['IFTTT_WEBHOOKS_URL'].format('code_completed')
-    requests.post(ifttt_event_url, json=data)
+    get_it()
 
 
 if __name__ == "__main__":
