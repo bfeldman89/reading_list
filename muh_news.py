@@ -91,7 +91,8 @@ def main():
     extract_kwds()
     clean_urls()
     upload_img()
-    wrap_it_up(t0, new)
+    funcs = ['scrape_pages', 'extract_kwds', 'clean_urls', 'upload_img']
+    wrap_it_up(t0, new, function=funcs)
 
 
 if __name__ == "__main__":
