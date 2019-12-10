@@ -10,8 +10,7 @@ from gensim.summarization import keywords as gen_kwds
 from newspaper import Article
 from newspaper.article import ArticleException
 
-airtab = Airtable(os.environ['articles_db'],
-                  'links', os.environ['AIRTABLE_API_KEY'])
+airtab = Airtable(os.environ['articles_db'], 'links', os.environ['AIRTABLE_API_KEY'])
 
 airtab_log = Airtable(os.environ['log_db'], 'log', os.environ['AIRTABLE_API_KEY'])
 
