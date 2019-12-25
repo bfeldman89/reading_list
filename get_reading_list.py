@@ -7,21 +7,11 @@ python3 ~/code/reading_list/get_reading_list.py
 import os
 import plistlib
 import time
-from airtable import Airtable
+from common import airtab_articles as airtab, wrap_from_module
 
-airtab = Airtable(os.environ['articles_db'], 'links', os.environ['AIRTABLE_API_KEY'])
-airtab_log = Airtable(os.environ['log_db'], 'log', os.environ['AIRTABLE_API_KEY'])
+wrap_it_up = wrap_from_module('reading_list/get_reading_list.py')
+
 input_file = os.path.join(os.environ['HOME'], 'Library/Safari/Bookmarks.plist')
-
-
-def wrap_it_up(t0, new, total=None, function=None):
-    this_dict = {'module': 'get_reading_list.py'}
-    this_dict['function'] = function
-    this_dict['duration'] = round(time.time() - t0, 2)
-    this_dict['total'] = total
-    this_dict['new'] = new
-    airtab_log.insert(this_dict, typecast=True)
-
 
 def get_reading_list():
     new_links, t0 = 0, time.time()

@@ -15,7 +15,7 @@ airtab_log = Airtable(os.environ['log_db'], 'log', os.environ['AIRTABLE_API_KEY'
 
 
 def wrap_it_up(t0, new, total=None, function=None):
-    this_dict = {'module': 'muh_news.py'}
+    this_dict = {'module': 'reading_list/muh_news.py'}
     this_dict['function'] = function
     this_dict['duration'] = round(time.time() - t0, 2)
     this_dict['total'] = total
