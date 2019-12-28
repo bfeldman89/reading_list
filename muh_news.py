@@ -3,24 +3,15 @@
 import datetime
 import time
 import urllib.parse
-import os
 
-from airtable import Airtable
 from gensim.summarization import keywords as gen_kwds
 from newspaper import Article
 from newspaper.article import ArticleException
 
-airtab = Airtable(os.environ['articles_db'], 'links', os.environ['AIRTABLE_API_KEY'])
-airtab_log = Airtable(os.environ['log_db'], 'log', os.environ['AIRTABLE_API_KEY'])
+from common import airtab_articles as airtab, wrap_from_module
 
 
-def wrap_it_up(t0, new, total=None, function=None):
-    this_dict = {'module': 'reading_list/muh_news.py'}
-    this_dict['function'] = function
-    this_dict['duration'] = round(time.time() - t0, 2)
-    this_dict['total'] = total
-    this_dict['new'] = new
-    airtab_log.insert(this_dict, typecast=True)
+wrap_it_up = wrap_from_module('muh_news.py')
 
 
 def scrape_pages():

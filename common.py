@@ -9,7 +9,6 @@ from documentcloud import DocumentCloud
 
 airtab_articles = Airtable(os.environ['articles_db'], 'links', os.environ['AIRTABLE_API_KEY'])
 
-
 airtab_log = Airtable(base_key=os.environ['log_db'],
                       table_name='log',
                       api_key=os.environ['AIRTABLE_API_KEY'])
