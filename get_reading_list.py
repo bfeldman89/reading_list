@@ -13,30 +13,38 @@ wrap_it_up = wrap_from_module('reading_list/get_reading_list.py')
 
 input_file = os.path.join(os.environ['HOME'], 'Library/Safari/Bookmarks.plist')
 
+t0 = time.time()
+
+
 def get_reading_list():
-    new_links, t0 = 0, time.time()
     with open(input_file, 'rb') as plist_file:
         plist = plistlib.load(plist_file)
     children = plist['Children']
     for child in children:
         if child.get('Title', None) == 'com.apple.ReadingList':
-            reading_list = child
-    bookmarks = reading_list['Children']
-    print("total links on reading list: " + str(len(bookmarks)))
+            bookmarks = child.get('Children')
+            return bookmarks
+
+
+def parse_reading_list(bookmarks):
+    new_links = 0
     for bookmark in bookmarks:
-        link = bookmark['URLString']
-        search_results = airtab.search('url', link)
-        if not search_results:
-            this_dict = {}
-            this_dict['url'] = link
+        this_dict = {}
+        this_dict['url'] = bookmark.get('URLString')
+        res = airtab.search('url', this_dict['url'])
+        if not res:
             this_dict['via'] = 'get_reading_list.py'
+            this_dict['title'] = bookmark.get('URIDictionary')['title']
+            this_dict['excerpt'] = bookmark.get('ReadingList')['PreviewText']
+            this_dict['img_url'] = bookmark.get('imageURL')
             airtab.insert(this_dict)
             new_links += 1
     wrap_it_up(t0, new_links, len(bookmarks), 'get_reading_list')
 
 
 def main():
-    get_reading_list()
+    this_list = get_reading_list()
+    parse_reading_list(this_list)
 
 
 if __name__ == "__main__":
