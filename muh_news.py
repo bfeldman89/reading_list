@@ -17,11 +17,11 @@ wrap_it_up = wrap_from_module('muh_news.py')
 def scrape_pages():
     t0, i = time.time(), 0
     # records = airtab.get_all(view='needs news_scraper.py')
-    records = airtab.get_all(formula='script ran = ""')
+    records = airtab.get_all(formula="script_ran = ''")
     for record in records:
         this_dict = {}
         url = record['fields']['clean url']
-        this_dict['script ran'] = time.strftime('%c')
+        this_dict['script_ran'] = time.strftime('%c')
         try:
             article = Article(url)
             article.download()
@@ -33,8 +33,8 @@ def scrape_pages():
             this_dict['excerpt2'] = article.summary
             i += 1
         except ArticleException as err:
-            print(f"🤬: {err}")
-            this_dict['oops'] = 'newspaper fucked up'
+            this_dict['err'] = f"🤬: {err}"
+            print(this_dict['err'])
         finally:
             airtab.update(record['id'], this_dict)
     wrap_it_up(t0=t0, new=i, total=len(records), function='scrape_pages')
