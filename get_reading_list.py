@@ -28,18 +28,22 @@ def get_reading_list():
 
 def parse_reading_list(bookmarks):
     new_links = 0
-    for bookmark in bookmarks:
-        this_dict = {}
-        this_dict['url'] = bookmark.get('URLString')
-        res = airtab.search('url', this_dict['url'])
-        if not res:
-            this_dict['via'] = 'get_reading_list.py'
-            this_dict['title'] = bookmark.get('URIDictionary')['title']
-            this_dict['excerpt'] = bookmark.get('ReadingList')['PreviewText']
-            this_dict['img_url'] = bookmark.get('imageURL')
-            airtab.insert(this_dict)
-            new_links += 1
-    wrap_it_up(t0, new_links, len(bookmarks), 'get_reading_list')
+    if bookmarks:
+        total_links = len(bookmarks)
+        for bookmark in bookmarks:
+            this_dict = {}
+            this_dict['url'] = bookmark.get('URLString')
+            res = airtab.search('url', this_dict['url'])
+            if not res:
+                this_dict['via'] = 'get_reading_list.py'
+                this_dict['title'] = bookmark.get('URIDictionary')['title']
+                this_dict['excerpt'] = bookmark.get('ReadingList')['PreviewText']
+                this_dict['img_url'] = bookmark.get('imageURL')
+                airtab.insert(this_dict)
+                new_links += 1
+    else:
+        total_links = 0
+    wrap_it_up(t0, new_links, total_links, 'get_reading_list')
 
 
 def main():
