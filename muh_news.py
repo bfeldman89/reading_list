@@ -42,7 +42,7 @@ def scrape_pages():
 
 def extract_kwds():
     t0 = time.time()
-    records = airtab.get_all(view='needs kwds3', fields=['title', 'body2', 'clean title'], max='100')
+    records = airtab.get_all(view='needs kwds3', fields=['title', 'body2', 'clean title'], max_records='100')
     for record in records:
         this_dict = {}
         if 'clean title' in record['fields']:
