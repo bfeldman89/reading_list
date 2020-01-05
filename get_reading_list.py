@@ -37,7 +37,10 @@ def parse_reading_list(bookmarks):
             if not res:
                 this_dict['via'] = 'get_reading_list.py'
                 this_dict['title'] = bookmark.get('URIDictionary')['title']
-                this_dict['excerpt'] = bookmark.get('ReadingList')['PreviewText']
+                try:
+                    this_dict['excerpt'] = bookmark.get('ReadingList')['PreviewText']
+                except KeyError as err:
+                    print(err)
                 this_dict['img_url'] = bookmark.get('imageURL')
                 airtab.insert(this_dict)
                 new_links += 1
