@@ -1,4 +1,4 @@
-# !/usr/bin/env python3
+# !/usr/local/bin/python3.6
 """This module imports each item from my Safari readinglist into an Airtable base.
 Aftwerwards, I manually remove all links from the readinglist.
 Ideally, the code is run a couple times a week. From the command line, it's:
