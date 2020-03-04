@@ -27,9 +27,9 @@ def scrape_pages():
             article.download()
             article.parse()
             this_dict['author2'] = ', '.join(article.authors)
-            this_dict['body2'] = article.text
+            this_dict['body'] = article.text
             article.nlp()
-            this_dict['kwds2'] = ', '.join(article.keywords)
+            this_dict['art_kwds'] = ', '.join(article.keywords)
             this_dict['excerpt2'] = article.summary
             i += 1
         except ArticleException as err:
@@ -42,15 +42,15 @@ def scrape_pages():
 
 def extract_kwds():
     t0 = time.time()
-    records = airtab.get_all(view='needs kwds3', fields=['title', 'body2', 'clean title'], max_records='100')
+    records = airtab.get_all(view='needs gen_kwds', fields=['title', 'body', 'clean title'], max_records='100')
     for record in records:
         this_dict = {}
         if 'clean title' in record['fields']:
             data = record['fields']['clean title'] + \
-                '\n' + record['fields']['body2']
+                '\n' + record['fields']['body']
         else:
-            data = record['fields']['body2']
-        this_dict['kwds3'] = ', '.join(gen_kwds(data, words=15, split=True, lemmatize=True))
+            data = record['fields']['body']
+        this_dict['gen_kwds'] = ', '.join(gen_kwds(data, words=15, split=True, lemmatize=True))
         airtab.update(record['id'], this_dict)
     wrap_it_up(t0=t0, new=len(records), total=len(records), function='extract_kwds')
 
