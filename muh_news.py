@@ -46,8 +46,7 @@ def extract_kwds():
     for record in records:
         this_dict = {}
         if 'clean title' in record['fields']:
-            data = record['fields']['clean title'] + \
-                '\n' + record['fields']['body']
+            data = f"{record['fields']['clean title']}\n{record['fields']['body']}"
         else:
             data = record['fields']['body']
         try:
