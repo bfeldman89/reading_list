@@ -52,9 +52,9 @@ def extract_kwds():
             data = record['fields']['body']
         try:
             this_dict['gen_kwds'] = ', '.join(gen_kwds(data, words=15, split=True, lemmatize=True))
+            airtab.update(record['id'], this_dict)
         except IndexError as err:
             print('ANOTHER FUCKING INDEX ERROR: ', err)
-        airtab.update(record['id'], this_dict)
     wrap_it_up(t0=t0, new=len(records), total=len(records), function='extract_kwds')
 
 
