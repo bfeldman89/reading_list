@@ -3,11 +3,9 @@
 import datetime
 import time
 import urllib.parse
-
-from gensim.summarization import keywords as gen_kwds
 from newspaper import Article
 from newspaper.article import ArticleException
-
+from gensim.summarization import keywords as gen_kwds
 from common import airtab_articles as airtab, wrap_from_module
 
 
@@ -42,7 +40,7 @@ def scrape_pages():
 
 def extract_kwds():
     t0 = time.time()
-    records = airtab.get_all(view='needs gen_kwds', fields=['title', 'body', 'clean title'], max_records='100')
+    records = airtab.get_all(view='needs gen_kwds', fields=['body', 'clean title'], max_records='100')
     for record in records:
         this_dict = {}
         if 'clean title' in record['fields']:
@@ -51,9 +49,11 @@ def extract_kwds():
             data = record['fields']['body']
         try:
             this_dict['gen_kwds'] = ', '.join(gen_kwds(data, words=15, split=True, lemmatize=True))
-            airtab.update(record['id'], this_dict)
         except IndexError as err:
+            this_dict['err'] = str(err)
+            this_dict['gen_kwds'] = ', '.join(gen_kwds(data, split=True, lemmatize=True))
             print('ANOTHER FUCKING INDEX ERROR: ', err)
+        airtab.update(record['id'], this_dict)
     wrap_it_up(t0=t0, new=len(records), total=len(records), function='extract_kwds')
 
 
