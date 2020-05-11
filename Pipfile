@@ -12,6 +12,7 @@ cloudinary = "*"
 python-documentcloud = "*"
 newspaper3k = "*"
 gensim = "*"
+newsapi-python = "*"
 
 [requires]
 python_version = "3.6"
