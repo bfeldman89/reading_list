@@ -12,8 +12,8 @@ airtab_log = Airtable(base_key=os.environ['log_db'],
                       table_name='log',
                       api_key=os.environ['AIRTABLE_API_KEY'])
 
-dc = DocumentCloud(username=os.environ['DOCUMENT_CLOUD_USERNAME'],
-                   password=os.environ['DOCUMENT_CLOUD_PW'])
+dc = DocumentCloud(username=os.environ['MUCKROCK_USERNAME'],
+                   password=os.environ['MUCKROCK_PW'])
 
 cloudinary.config(cloud_name='bfeldman89',
                   api_key=os.environ['CLOUDINARY_API_KEY'],
