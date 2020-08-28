@@ -19,7 +19,8 @@ cloudinary.config(cloud_name='bfeldman89',
                   api_key=os.environ['CLOUDINARY_API_KEY'],
                   api_secret=os.environ['CLOUDINARY_API_SECRET'])
 
-muh_headers = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36'}
+muh_headers = {
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36'}
 
 
 my_funcs = {'get_reading_list': 'rec43zeXFYciU2ZUH',
