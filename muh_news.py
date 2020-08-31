@@ -9,7 +9,7 @@ from gensim.summarization import keywords as gen_kwds
 from common import airtab_articles as airtab, wrap_from_module
 
 
-wrap_it_up = wrap_from_module('muh_news.py')
+wrap_it_up = wrap_from_module('reading_list/muh_news.py')
 
 
 def scrape_pages():
