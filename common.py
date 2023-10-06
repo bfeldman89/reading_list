@@ -8,9 +8,7 @@ from documentcloud import DocumentCloud
 
 airtab_articles = Airtable(os.environ['articles_db'], 'links', os.environ['AIRTABLE_API_KEY'])
 
-airtab_log = Airtable(base_key=os.environ['log_db'],
-                      table_name='log',
-                      api_key=os.environ['AIRTABLE_API_KEY'])
+airtab_log = Airtable(os.environ['log_db'], 'log', os.environ['AIRTABLE_API_KEY'])
 
 dc = DocumentCloud(username=os.environ['MUCKROCK_USERNAME'],
                    password=os.environ['MUCKROCK_PW'])
