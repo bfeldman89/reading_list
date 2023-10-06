@@ -10,9 +10,9 @@ pylint = "*"
 airtable-python-wrapper = "*"
 cloudinary = "*"
 newspaper3k = "*"
-gensim = "*"
+gensim = "<=3.8.3"
 newsapi-python = "*"
 documentcloud = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.8"
