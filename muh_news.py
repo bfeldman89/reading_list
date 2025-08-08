@@ -14,8 +14,8 @@ wrap_it_up = wrap_from_module('reading_list/muh_news.py')
 
 def scrape_pages():
     t0, i = time.time(), 0
-    # records = airtab.get_all(view='needs news_scraper.py')
-    records = airtab.get_all(formula="script_ran = ''")
+    # records = airtab.all(view='needs news_scraper.py')
+    records = airtab.all(formula="script_ran = ''")
     for record in records:
         this_dict = {}
         url = record['fields']['clean url']
@@ -40,7 +40,7 @@ def scrape_pages():
 
 def extract_kwds():
     t0 = time.time()
-    records = airtab.get_all(view='needs gen_kwds', fields=['body', 'clean title'], max_records='100')
+    records = airtab.all(view='needs gen_kwds', fields=['body', 'clean title'], max_records='100')
     for record in records:
         this_dict = {}
         if 'clean title' in record['fields']:
@@ -60,7 +60,7 @@ def extract_kwds():
 def clean_urls():
     t0 = time.time()
     records = airtab.search('parsed_at', '', fields='clean url')
-    # records = airtab.get_all(view='needs parsing', fields='clean url')
+    # records = airtab.all(view='needs parsing', fields='clean url')
     for record in records:
         x = urllib.parse.urlparse(record['fields']['clean url'])
         this_dict = {}
@@ -76,8 +76,8 @@ def clean_urls():
 
 def upload_img():
     t0 = time.time()
-    records = airtab.get_all(formula="AND(img_url != '', img = '')", fields='img_url')
-    # records = airtab.get_all(view='needs image', fields='img_url')
+    records = airtab.all(formula="AND(img_url != '', img = '')", fields='img_url')
+    # records = airtab.all(view='needs image', fields='img_url')
     for record in records:
         this_dict = {'img': [{'url': record['fields']['img_url']}]}
         airtab.update(record['id'], this_dict)

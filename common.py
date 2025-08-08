@@ -2,13 +2,15 @@
 """This module provides a function for shipping logs to Airtable."""
 import os
 import time
-from airtable import Airtable
+from pyairtable import Api
 import cloudinary
 from documentcloud import DocumentCloud
 
-airtab_articles = Airtable(os.environ['articles_db'], 'links', os.environ['AIRTABLE_API_KEY'])
+api = Api(os.environ['AIRTABLE_PAT'])
 
-airtab_log = Airtable(os.environ['log_db'], 'log', os.environ['AIRTABLE_API_KEY'])
+airtab_articles = api.table(os.environ['articles_db'], 'links')
+
+airtab_log = api.table(os.environ['log_db'], 'log')
 
 dc = DocumentCloud(username=os.environ['MUCKROCK_USERNAME'],
                    password=os.environ['MUCKROCK_PW'])
